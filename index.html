@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOOM — MVP to Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1B1A17;
+    --surface:#242220;
+    --surface-alt:#2C2A26;
+    --gold:#C08A3E;
+    --sage:#5B7065;
+    --ink:#EDE6D6;
+    --ink-muted:#9C9488;
+    --border:#3A3730;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:72px 28px 100px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    margin:0;
+  }
+  header{
+    margin-bottom:56px;
+  }
+  .tag{
+    color:var(--gold);
+    font-size:15px;
+    font-weight:500;
+    margin-bottom:14px;
+  }
+  h1{
+    font-size:40px;
+    line-height:1.15;
+    margin-bottom:16px;
+  }
+  header p{
+    color:var(--ink-muted);
+    font-size:17px;
+    max-width:56ch;
+    margin:0;
+  }
+
+  /* the loom: a vertical warp thread with weft rows crossing it */
+  .loom{
+    position:relative;
+    margin:64px 0;
+  }
+  .warp{
+    position:absolute;
+    left:11px;
+    top:6px;
+    bottom:6px;
+    width:2px;
+    background:linear-gradient(var(--gold), var(--sage));
+    opacity:0.55;
+  }
+  .row{
+    position:relative;
+    padding:0 0 40px 44px;
+  }
+  .row:last-child{padding-bottom:0;}
+  .row::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:8px;
+    width:24px;
+    height:2px;
+    background:var(--border);
+  }
+  .row::after{
+    content:'';
+    position:absolute;
+    left:5px;
+    top:2px;
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:var(--surface);
+    border:2px solid var(--gold);
+  }
+  .row.done::after{background:var(--gold);border-color:var(--gold);}
+  .row-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:8px;
+  }
+  .row-head h3{
+    font-size:20px;
+    color:var(--ink);
+  }
+  .status{
+    font-size:13px;
+    color:var(--ink-muted);
+    white-space:nowrap;
+    font-family:'Inter',sans-serif;
+  }
+  .row p{
+    color:var(--ink-muted);
+    font-size:15.5px;
+    margin:0;
+    max-width:58ch;
+  }
+  .row code{
+    background:var(--surface-alt);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:13.5px;
+    color:var(--gold);
+  }
+
+  /* the fork-in-the-road decision panel */
+  .decision{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:32px;
+    margin:56px 0;
+  }
+  .decision h2{
+    font-size:24px;
+    margin-bottom:6px;
+  }
+  .decision > p{
+    color:var(--ink-muted);
+    font-size:15px;
+    margin:0 0 24px;
+  }
+  .paths{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:560px){
+    .paths{grid-template-columns:1fr;}
+  }
+  .path{
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:20px;
+  }
+  .path.recommended{
+    border-color:var(--gold);
+    background:rgba(192,138,62,0.06);
+  }
+  .path h4{
+    font-family:'Fraunces',serif;
+    font-size:17px;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .path .sub{
+    color:var(--gold);
+    font-size:12.5px;
+    margin-bottom:14px;
+  }
+  .path ul{
+    margin:0;
+    padding-left:18px;
+    color:var(--ink-muted);
+    font-size:14.5px;
+  }
+  .path li{margin-bottom:6px;}
+
+  /* next steps */
+  .next{
+    margin-top:56px;
+  }
+  .next h2{
+    font-size:22px;
+    margin-bottom:20px;
+  }
+  .next ol{
+    margin:0;
+    padding-left:20px;
+    color:var(--ink-muted);
+    font-size:15.5px;
+  }
+  .next li{
+    margin-bottom:10px;
+    padding-left:4px;
+  }
+  .next li::marker{
+    color:var(--gold);
+    font-family:'Fraunces',serif;
+  }
+
+  footer{
+    margin-top:72px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+    color:var(--ink-muted);
+    font-size:13.5px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="tag">LOOM — Production Launch</div>
+    <h1>Five threads to weave before LOOM leaves the loom.</h1>
+    <p>Hosting, deployment, monitoring, legal, and go-to-market — each one crosses the same warp thread: the decision below about whether LOOM stays bring-your-own-key.</p>
+  </header>
+
+  <div class="loom">
+    <div class="warp"></div>
+
+    <div class="row done">
+      <div class="row-head">
+        <h3>Hosting &amp; Domain</h3>
+        <span class="status">ready to move</span>
+      </div>
+      <p>Stay on GitHub Pages if bring-your-own-key; move the API layer to Vercel or Railway only if a backend gets added. Either way, point a custom domain at it.</p>
+    </div>
+
+    <div class="row">
+      <div class="row-head">
+        <h3>Continuous Deployment</h3>
+        <span class="status">not started</span>
+      </div>
+      <p>A <code>GitHub Actions</code> workflow deploying on push to <code>main</code> — no build step needed for the current single-file structure.</p>
+    </div>
+
+    <div class="row">
+      <div class="row-head">
+        <h3>Monitoring</h3>
+        <span class="status">not started</span>
+      </div>
+      <p>Sentry's free tier on the router's dispatch logic, so a silent Warp/Weft/Heddle/Selvage failure surfaces before a user reports it.</p>
+    </div>
+
+    <div class="row">
+      <div class="row-head">
+        <h3>Payments &amp; Legal</h3>
+        <span class="status">conditional</span>
+      </div>
+      <p>Only needed if LOOM becomes a hosted, paid product — Stripe Billing, a Privacy Policy disclosing that inputs reach Anthropic's API, and a one-page Terms of Service.</p>
+    </div>
+
+    <div class="row">
+      <div class="row-head">
+        <h3>Go-to-Market</h3>
+        <span class="status">not started</span>
+      </div>
+      <p>Product Hunt, dev communities, and the visible reasoning trace as the hook — no pitch deck or CRM required at this stage.</p>
+    </div>
+  </div>
+
+  <div class="decision">
+    <h2>The fork in the road</h2>
+    <p>Every thread above depends on this one choice.</p>
+    <div class="paths">
+      <div class="path recommended">
+        <h4>Stay BYOK</h4>
+        <div class="sub">recommended for MVP</div>
+        <ul>
+          <li>No backend, no billing, no held keys</li>
+          <li>GitHub Pages is sufficient</li>
+          <li>Launch in days</li>
+          <li>Validates demand before complexity</li>
+        </ul>
+      </div>
+      <div class="path">
+        <h4>Go Hosted</h4>
+        <div class="sub">once demand is proven</div>
+        <ul>
+          <li>Backend required to hold &amp; meter the key</li>
+          <li>Enables charging for LOOM itself</li>
+          <li>Adds billing, privacy policy, ToS</li>
+          <li>Launch in weeks, not days</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="next">
+    <h2>Immediate next steps</h2>
+    <ol>
+      <li>Confirm BYOK vs Hosted.</li>
+      <li>Add the GitHub Actions deploy workflow.</li>
+      <li>Wire in Sentry.</li>
+      <li>Buy the domain.</li>
+      <li>Prepare the Product Hunt launch post and demo video.</li>
+    </ol>
+  </div>
+
+  <footer>
+    LOOM · Warp · Weft · Heddle · Selvage — one goal, four specialists.
+  </footer>
+
+</div>
+</body>
+</html>
